@@ -1,0 +1,21 @@
+semgrep: 331 findings, 18 xss_* files affected
+    92  php-xss-tainted-output
+    92  php-xss-db-output
+    86  echoed-request
+    19  js-eval-in-page
+    17  tainted-sql-string
+     8  tainted-exec
+     5  js-innerhtml-assignment
+     4  phpinfo-use
+     4  tainted-url-host
+     4  tainted-filename
+gitleaks: 1 findings
+     1  generic-api-key
+trivy: 1783 vulnerabilities in 100 packages
+     0  CRITICAL
+    28  HIGH
+  1262  MEDIUM
+   493  LOW
+     0  UNKNOWN
+retire:
+  jquery 1.4.4 (jquery-1.4.4.min.js): 7 vulns CVE-2011-4969, CVE-2012-6708, CVE-2015-9251, CVE-2019-11358, CVE-2020-11023, CVE-2020-7656

@@ -1,0 +1,61 @@
+rules:
+  - id: php-xss-tainted-output
+    mode: taint
+    languages: [php]
+    severity: ERROR
+    message: Дані від користувача потрапляють у вивід без контекстного кодування (CWE-79)
+    metadata:
+      cwe: "CWE-79"
+    pattern-sources:
+      - pattern: $_GET[...]
+      - pattern: $_POST[...]
+      - pattern: $_REQUEST[...]
+      - pattern: $_COOKIE[...]
+      - pattern: $_SERVER["HTTP_USER_AGENT"]
+      - pattern: $_SERVER["HTTP_REFERER"]
+      - pattern: $_SERVER["PHP_SELF"]
+      - pattern: $_SERVER["REQUEST_URI"]
+    pattern-sanitizers:
+      - pattern: htmlspecialchars(...)
+      - pattern: htmlentities(...)
+      - pattern: urlencode(...)
+      - pattern: rawurlencode(...)
+      - pattern: intval(...)
+    pattern-sinks:
+      - pattern: echo ...;
+      - pattern: print(...);
+      - pattern: printf(...);
+
+  - id: php-xss-db-output
+    languages: [php]
+    severity: WARNING
+    message: Значення з бази даних виводиться без кодування, можлива збережена XSS (CWE-79)
+    metadata:
+      cwe: "CWE-79"
+    patterns:
+      - pattern-either:
+          - pattern: echo $ROW->$FIELD;
+          - pattern: echo $ROW[$FIELD];
+      - metavariable-regex:
+          metavariable: $ROW
+          regex: ^\$row$
+
+  - id: js-eval-in-page
+    languages: [generic]
+    severity: ERROR
+    message: Виклик eval() у JavaScript сторінки, можлива DOM XSS (CWE-95)
+    metadata:
+      cwe: "CWE-95"
+    paths:
+      include: ["*.php", "*.js"]
+    pattern: eval(...)
+
+  - id: js-innerhtml-assignment
+    languages: [generic]
+    severity: WARNING
+    message: Присвоєння innerHTML, можлива DOM XSS (CWE-79)
+    metadata:
+      cwe: "CWE-79"
+    paths:
+      include: ["*.php", "*.js"]
+    pattern: .innerHTML = $X
