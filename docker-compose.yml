@@ -24,3 +24,16 @@ services:
       - "127.0.0.1:8081:8081"
     networks: [lab, edge]
     depends_on: [bwapp-vuln, bwapp-fixed]
+
+  tests:
+    build: ./tests
+    image: bpz-rgr/tests:latest
+    profiles: [tests]
+    networks: [lab]
+    init: true
+    shm_size: 1gb
+    environment:
+      TARGET: ${TARGET:-http://bwapp-vuln}
+    volumes:
+      - ./tests:/tests
+    command: pytest -p no:cacheprovider -v -rA
