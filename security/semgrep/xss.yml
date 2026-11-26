@@ -21,6 +21,8 @@ rules:
       - pattern: urlencode(...)
       - pattern: rawurlencode(...)
       - pattern: intval(...)
+      - pattern: html_encode(...)
+      - pattern: js_encode(...)
     pattern-sinks:
       - pattern: echo ...;
       - pattern: print(...);

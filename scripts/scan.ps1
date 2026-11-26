@@ -27,10 +27,10 @@ docker run --rm -v "${root}:/work" -v "${src}:/src:ro" zricethezav/gitleaks:v8.2
     detect --no-git --source /src `
     --report-format json --report-path "/work/scans/$Label/gitleaks.json" --exit-code 0
 
-docker run --rm -v "${root}:/work" -v trivy-cache:/root/.cache -v //var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.57.1 `
+docker run --rm -v "${root}:/work" -e TRIVY_DB_REPOSITORY=ghcr.io/aquasecurity/trivy-db:2 -v trivy-cache:/root/.cache -v //var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.57.1 `
     image --quiet --scanners vuln --format json --output "/work/scans/$Label/trivy.json" $image
 
-docker run --rm -v "${root}:/work" -v trivy-cache:/root/.cache -v //var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.57.1 `
+docker run --rm -v "${root}:/work" -e TRIVY_DB_REPOSITORY=ghcr.io/aquasecurity/trivy-db:2 -v trivy-cache:/root/.cache -v //var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.57.1 `
     image --quiet --format cyclonedx --output "/work/scans/$Label/sbom.cdx.json" $image
 
 docker run --rm -v "${root}:/work" -v "${src}:/src:ro" -w /work node:20-alpine `

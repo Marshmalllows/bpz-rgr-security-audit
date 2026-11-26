@@ -19,39 +19,8 @@ bWAPP is licensed under a Creative Commons Attribution-NonCommercial-NoDerivativ
 include("security.php");
 include("security_level_check.php");
 include("functions_external.php");
+include("output_encoding.php");
 include("selections.php");
-
-function xss($data)
-{
-         
-    switch($_COOKIE["security_level"])
-    {
-        
-        case "0" : 
-            
-            $data = no_check($data);            
-            break;
-        
-        case "1" :
-            
-            $data = xss_check_4($data);
-            break;
-        
-        case "2" :            
-                       
-            $data = xss_check_3($data);            
-            break;
-        
-        default : 
-            
-            $data = no_check($data);            
-            break;   
-
-    }       
-
-    return $data;
-
-}
 
 ?>
 <!DOCTYPE html>
@@ -141,7 +110,7 @@ function xss($data)
         else            
         { 
 
-            echo "Welcome " . xss($firstname) . " " . xss($lastname);   
+            echo "Welcome " . html_encode($firstname) . " " . html_encode($lastname);   
 
         }
 

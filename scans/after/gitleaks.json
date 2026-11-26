@@ -1,0 +1,22 @@
+[
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 25,
+  "EndLine": 25,
+  "StartColumn": 3,
+  "EndColumn": 89,
+  "Match": "secret.= \"ZS48YnIgLz5Eb24ndCBsZXQgVEhFTSB0YWtlIHlvdXIgbWluZCBhbmQgc291bC48YnIgLz5Mb3Zl\"",
+  "Secret": "ZS48YnIgLz5Eb24ndCBsZXQgVEhFTSB0YWtlIHlvdXIgbWluZCBhbmQgc291bC48YnIgLz5Mb3Zl",
+  "File": "/src/top_security.php",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 4.99801,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "/src/top_security.php:generic-api-key:25"
+ }
+]

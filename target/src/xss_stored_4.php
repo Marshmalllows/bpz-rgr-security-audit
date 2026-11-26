@@ -20,47 +20,17 @@ include("security.php");
 include("security_level_check.php");
 include("selections.php");
 include("functions_external.php");
+include("output_encoding.php");
 include("connect_i.php");
-
-function xss($data)
-{
-
-    switch($_COOKIE["security_level"])
-    {
-
-        case "0" :
-
-            $data = no_check($data);
-            break;
-
-        case "1" :
-
-            $data = xss_check_4($data);
-            break;
-
-        case "2" :
-
-            $data = xss_check_3($data);
-            break;
-
-        default :
-
-            $data = no_check($data);
-            break;
-
-    }
-
-    return $data;
-
-}
 
 $ip_address = $_SERVER["REMOTE_ADDR"];
 $user_agent = $_SERVER["HTTP_USER_AGENT"];
 
-// Writes the entry into the database
-$sql = "INSERT INTO visitors (date, user_agent, ip_address) VALUES (now(), '" . xss(sqli_check_3($link, $user_agent)) . "', '" . $ip_address . "')";
+$stmt = $link->prepare("INSERT INTO visitors (date, user_agent, ip_address) VALUES (now(), ?, ?)");
+$stmt->bind_param("ss", $user_agent, $ip_address);
 
-$recordset = $link->query($sql);
+$recordset = $stmt->execute();
+$stmt->close();
 
 if(!$recordset)
 {
@@ -69,8 +39,9 @@ if(!$recordset)
 
 }
 
-// Writes the entry into a text file
-$line = "'" . date("y/m/d G.i:s", time()) . "', '" . $ip_address . "', '" . xss($user_agent) . "'" . "\r\n";     
+$line = "'" . date("y/m/d G.i:s", time()) . "', '" . $ip_address . "', '" . str_replace(array("", "
+"), " ", $user_agent) . "'" . "
+";
 
 $fp = fopen("logs/visitors.txt", "a");
 fputs($fp, $line, 200);
@@ -165,9 +136,9 @@ while($row = $recordset->fetch_object())
 ?>
         <tr height="40">
 
-            <td align="center"><?php echo $row->date; ?></td>
-            <td align="center"><?php echo $row->ip_address; ?></td>
-            <td><?php echo $row->user_agent; ?></td>
+            <td align="center"><?php echo html_encode($row->date); ?></td>
+            <td align="center"><?php echo html_encode($row->ip_address); ?></td>
+            <td><?php echo html_encode($row->user_agent); ?></td>
 
         </tr>
 

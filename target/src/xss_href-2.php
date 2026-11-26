@@ -19,6 +19,7 @@ bWAPP is licensed under a Creative Commons Attribution-NonCommercial-NoDerivativ
 include("security.php");
 include("security_level_check.php");
 include("functions_external.php");
+include("output_encoding.php");
 include("connect.php");
 include("selections.php");
 
@@ -29,7 +30,7 @@ if(isset($_GET["name"]) and $_GET["name"] != "")
 
     $name = $_GET["name"];
 
-    $message = "<p>Hello " . ucwords(xss_check_3($name)) . ", please vote for your favorite movie.</p>";
+    $message = "<p>Hello " . html_encode(ucwords($name)) . ", please vote for your favorite movie.</p>";
     $message.= "<p>Remember, Tony Stark wants to win every time...</p>";
 
 }
@@ -43,37 +44,6 @@ else
 
 }
 
-function hpp($data)
-{
-         
-    switch($_COOKIE["security_level"])
-    {
-        
-        case "0" : 
-            
-            $data = no_check($data);            
-            break;
-        
-        case "1" :
-            
-            $data = urlencode($data);
-            break;
-        
-        case "2" :            
-                       
-            $data = urlencode($data);
-            break;
-        
-        default : 
-            
-            $data = no_check($data);            
-            break;   
-
-    }       
-
-    return $data;
-
-}
 
 ?>
 <!DOCTYPE html>
@@ -182,11 +152,11 @@ function hpp($data)
 
         <tr height="30">
 
-            <td><?php echo $row["title"]; ?></td>
-            <td align="center"><?php echo $row["release_year"]; ?></td>
-            <td><?php echo $row["main_character"]; ?></td>
-            <td align="center"><?php echo $row["genre"]; ?></td>
-            <td align="center"> <a href=xss_href-3.php?movie=<?php echo $row["id"]; ?>&name=<?php echo hpp($name);?>&action=vote>Vote</a></td>
+            <td><?php echo html_encode($row["title"]); ?></td>
+            <td align="center"><?php echo html_encode($row["release_year"]); ?></td>
+            <td><?php echo html_encode($row["main_character"]); ?></td>
+            <td align="center"><?php echo html_encode($row["genre"]); ?></td>
+            <td align="center"> <a href="xss_href-3.php?movie=<?php echo html_encode($row["id"]); ?>&amp;name=<?php echo html_encode(urlencode($name));?>&amp;action=vote">Vote</a></td>
 
         </tr>         
 <?php        

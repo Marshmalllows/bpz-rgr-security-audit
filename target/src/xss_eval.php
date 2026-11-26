@@ -130,33 +130,6 @@ else
     
 } 
 
-function xss($data)
-{
-         
-    switch($_COOKIE["security_level"])
-    {
-        
-        case "0" : 
-            
-            $data = no_check($data);            
-            break;
-         
-        case "1" :
-            
-            $data = xss_check_3($data);
-            break;    
-        
-        default : 
-            
-            $data = no_check($data);            
-            break;  
-
-    }       
-
-    return $data;
-
-}
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -215,21 +188,8 @@ function xss($data)
     <p>The current date on your computer is:</p>
     <?php
 
-    if(isset($_GET["date"]))
-    {    
-
-        if($_COOKIE["security_level"] == "2")
-        {
-
-            if($_GET["date"] != "Date()")
-            { 
-
-                echo "<p><font color=\"red\">Invalid input detected!</font></p>";        
-
-            }
-
-            else
-            {
+    if(isset($_GET["date"]) && $_GET["date"] == "Date()")
+    {
 
     ?>
 
@@ -237,42 +197,20 @@ function xss($data)
 
     <script>
 
-    eval("document.write(<?php echo xss($_GET["date"])?>)");
+    document.write(Date());
 
     </script>
 
     </p>
 
     <?php
-
-            }    
-
-        }
-
-        else
-        {
-
-    ?>
-
-    <p>
-
-    <script>
-
-    eval("document.write(<?php echo xss($_GET["date"])?>)");
-
-    </script>
-
-    </p>
-    <?php
-
-        }
 
     }
 
     else
     {
 
-        echo "<p><font color=\"red\">Invalid input detected!</font></p>"; 
+        echo "<p><font color=\"red\">Invalid input detected!</font></p>";
 
     }
 

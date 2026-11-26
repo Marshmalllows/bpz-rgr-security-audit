@@ -19,6 +19,7 @@ bWAPP is licensed under a Creative Commons Attribution-NonCommercial-NoDerivativ
 include("security.php");
 include("security_level_check.php");
 include("functions_external.php");
+include("output_encoding.php");
 include("connect_i.php");
 include("selections.php");
 
@@ -26,46 +27,10 @@ $entry = "";
 $owner = "";
 $message = "";
 
-function xss($data)
-{
-    
-    include("connect_i.php");
-
-    switch($_COOKIE["security_level"])
-    {
-
-        case "0" : 
-
-            $data = sqli_check_3($link, $data);
-            break;
-
-        case "1" :
-
-            $data = sqli_check_3($link, $data);
-            // $data = xss_check_4($data);
-            break;
-
-        case "2" :
-
-            $data = sqli_check_3($link, $data);
-            // $data = xss_check_3($data);
-            break;
-
-        default :
-
-            $data = sqli_check_3($link, $data);
-            break;
-
-    }
-
-    return $data;
-
-}
-
 if(isset($_POST["entry_add"]))
 {
 
-    $entry = xss($_POST["entry"]);
+    $entry = $_POST["entry"];
     $owner = $_SESSION["login"];
 
     if($entry == "")
@@ -78,9 +43,11 @@ if(isset($_POST["entry_add"]))
     else            
     { 
 
-        $sql = "INSERT INTO blog (date, entry, owner) VALUES (now(),'" . $entry . "','" . $owner . "')";
+        $stmt = $link->prepare("INSERT INTO blog (date, entry, owner) VALUES (now(), ?, ?)");
+        $stmt->bind_param("ss", $entry, $owner);
 
-        $recordset = $link->query($sql);
+        $recordset = $stmt->execute();
+        $stmt->close();
 
         if(!$recordset)
         {
@@ -287,63 +254,19 @@ if(!$recordset)
 while($row = $recordset->fetch_object())
 {
 
-    if($_COOKIE["security_level"] == "2")
-    {
-
-
-
 ?>
         <tr height="40">
 
-            <td align="center"><?php echo $row->id; ?></td>
-            <td><?php echo $row->owner; ?></td>
-            <td><?php echo $row->date; ?></td>
-            <td><?php echo xss_check_3($row->entry); ?></td>
+            <td align="center"><?php echo html_encode($row->id); ?></td>
+            <td><?php echo html_encode($row->owner); ?></td>
+            <td><?php echo html_encode($row->date); ?></td>
+            <td><?php echo html_encode($row->entry); ?></td>
 
         </tr>
 
 <?php
 
-    }
-
-    else
-        
-        if($_COOKIE["security_level"] == "1")
-        {
-
-?>
-        <tr height="40">
-
-            <td align="center"><?php echo $row->id; ?></td>
-            <td><?php echo $row->owner; ?></td>
-            <td><?php echo $row->date; ?></td>
-            <td><?php echo xss_check_4($row->entry); ?></td>
-
-        </tr>
-
-<?php
-
-        }
-        
-        else        
-
-            {
-
-?>
-        <tr height="40">
-
-            <td align="center"><?php echo $row->id; ?></td>
-            <td><?php echo $row->owner; ?></td>
-            <td><?php echo $row->date; ?></td>
-            <td><?php echo $row->entry; ?></td>
-
-        </tr>
-
-<?php          
-
-            }
-
-}      
+}
 
 $recordset->close();
 

@@ -20,41 +20,30 @@ include("security.php");
 include("security_level_check.php");
 include("selections.php");
 include("functions_external.php");
+include("output_encoding.php");
+
+$movies = array("CAPTAIN AMERICA", "IRON MAN", "SPIDER-MAN", "THE INCREDIBLE HULK", "THE WOLVERINE", "THOR", "X-MEN");
 
 if(isset($_GET["title"]) and $_GET["title"])
 {
 
-    // Creates the movie table
-    $movies = array("CAPTAIN AMERICA", "IRON MAN", "SPIDER-MAN", "THE INCREDIBLE HULK", "THE WOLVERINE", "THOR", "X-MEN");
+    $title = $_GET["title"];
 
-    if($_COOKIE["security_level"] != "1" && $_COOKIE["security_level"] != "2")
-    {
-
-        // Retrieves the movie title
-        $title = $_GET["title"];
-
-    }
-
-    else
-    {
-
-        $title = xss_check_3($_GET["title"]);
-
-    }
-
-    // Generates the output depending on the movie title received from the client
     if(in_array(strtoupper($title), $movies))
-        $string = '{"movies":[{"response":"Yes! We have that movie..."}]}';
+        $response = "Yes! We have that movie...";
     else
-        $string = '{"movies":[{"response":"' . $title . '??? Sorry, we don&#039;t have that movie :("}]}';
+        $response = $title . "??? Sorry, we don't have that movie :(";
 
 }
 
 else
 {
 
-	$string = '{"movies":[{"response":"HINT: our master really loves Marvel movies :)"}]}';
+    $response = "HINT: our master really loves Marvel movies :)";
+
 }
+
+$string = json_encode(array("movies" => array(array("response" => $response))));
 
 ?>
 <!DOCTYPE html>
@@ -128,12 +117,11 @@ else
 
     <script>
 
-        var JSONResponseString = '<?php echo $string ?>';
+        var JSONResponseString = <?php echo js_encode($string) ?>;
 
-        // var JSONResponse = eval ("(" + JSONResponseString + ")");
         var JSONResponse = JSON.parse(JSONResponseString);
 
-        document.getElementById("result").innerHTML=JSONResponse.movies[0].response;
+        document.getElementById("result").textContent = JSONResponse.movies[0].response;
 
     </script>
 

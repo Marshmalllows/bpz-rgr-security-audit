@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:0b6dfcff-3eac-4b49-8f2d-47c4c34f553c",
+  "serialNumber": "urn:uuid:7a4b0d79-76fc-4f8d-bc6d-14239fa23a33",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-24T21:51:15+00:00",
+    "timestamp": "2026-11-26T07:53:21+00:00",
     "tools": {
       "components": [
         {
@@ -123,7 +123,7 @@
   },
   "components": [
     {
-      "bom-ref": "e9edf748-d409-4b4c-be62-e1847656decc",
+      "bom-ref": "13475309-f5e3-4193-8b5b-a142d988dd33",
       "type": "operating-system",
       "name": "ubuntu",
       "version": "14.04",
@@ -14700,7 +14700,7 @@
   ],
   "dependencies": [
     {
-      "ref": "e9edf748-d409-4b4c-be62-e1847656decc",
+      "ref": "13475309-f5e3-4193-8b5b-a142d988dd33",
       "dependsOn": [
         "pkg:deb/ubuntu/adduser@3.113%2Bnmu3ubuntu3?arch=all&distro=ubuntu-14.04",
         "pkg:deb/ubuntu/apache2-bin@2.4.7-1ubuntu4.9?arch=amd64&distro=ubuntu-14.04",
@@ -17052,7 +17052,7 @@
     {
       "ref": "pkg:oci/bwapp@sha256%3A2f41183ea9f9e8fb36678d7a2a0c8a9db9a59f4569cee02fe6664b419b2600ee?arch=amd64&repository_url=index.docker.io%2Fraesene%2Fbwapp",
       "dependsOn": [
-        "e9edf748-d409-4b4c-be62-e1847656decc"
+        "13475309-f5e3-4193-8b5b-a142d988dd33"
       ]
     }
   ],

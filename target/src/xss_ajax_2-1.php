@@ -157,36 +157,9 @@ include("selections.php");
                 if(xmlHttp.status == 200)
                 {
                     // Extracts the JSON retrieved from the server
-<?php
-
-                if($_COOKIE["security_level"] == "2")
-                {
-
-?>
                     JSONResponse = JSON.parse(xmlHttp.responseText);
-<?php
-
-                }
-
-                else
-                {
-?>
-                    JSONResponse = eval("(" + xmlHttp.responseText + ")");
-<?php
-
-                    }
-
-?>
-                    // Generates HTML output
-                    // var result = "";
-                    // Obtains the value of the JSON response
                     result = JSONResponse.movies[0].response;
-                    // Iterates through the arrays and create an HTML structure
-                    //for (var i=0; i<JSONResponse.movies.length; i++)
-                    //    result += JSONResponse.movies[i].response + "<br/>";
-                    // Obtains a reference to the <div> element on the page
-                    // Displays the data received from the server
-                    document.getElementById("result").innerHTML = result;
+                    document.getElementById("result").textContent = result;
                     // Restart sequence
                     setTimeout("process()", 1000);
                 } 
